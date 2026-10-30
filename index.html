@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FIMMUN VI || ASCEND EDITION</title>
+  
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#232431',
+              darker: '#1d1e28',
+              card: '#343546',
+              cardHover: '#3f4055',
+              accent: '#a3a0c2',
+              purpleBright: '#8c88b0',
+              accentGlow: 'rgba(163, 160, 194, 0.2)',
+              textMain: '#f0eff7',
+              textMuted: '#a8a6be',
+              border: 'rgba(163, 160, 194, 0.22)'
+            }
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      --bg-dark: #232431;
+      --bg-card: #343546;
+      --bg-card-hover: #3f4055;
+      --accent-purple: #a3a0c2;
+      --accent-bright: #c0bdde;
+      --accent-glow: rgba(163, 160, 194, 0.2);
+      --text-main: #f0eff7;
+      --text-muted: #a8a6be;
+      --border-color: rgba(163, 160, 194, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1b1c26;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #3a3b4c;
+      border-radius: 4px;
+      border: 1px solid var(--border-color);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #a3a0c2;
+    }
+
+    /* Typography Overrides */
+    h1, h2, h3, .font-serif-heading {
+      font-family: 'Cinzel', serif;
+    }
+
+    /* Glassmorphic Effects */
+    .glass-panel {
+      background: rgba(52, 53, 70, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+    }
+
+    .glass-nav {
+      background: rgba(35, 36, 49, 0.9);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .glass-card {
+      background: linear-gradient(145deg, rgba(52, 53, 70, 0.85) 0%, rgba(43, 44, 58, 0.9) 100%);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(192, 189, 222, 0.6);
+      box-shadow: 0 16px 36px -10px rgba(163, 160, 194, 0.25);
+      background: linear-gradient(145deg, rgba(63, 64, 85, 0.9) 0%, rgba(50, 51, 67, 0.95) 100%);
+    }
+
+    /* Gradient Text & Glows */
+    .text-gradient {
+      background: linear-gradient(135deg, #ffffff 0%, #f0eff7 40%, #c0bdde 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .glow-purple {
+      box-shadow: 0 0 30px rgba(163, 160, 194, 0.25);
+    }
+
+    .glow-purple-sm {
+      box-shadow: 0 0 18px rgba(163, 160, 194, 0.18);
+    }
+
+    /* Floating Canvas */
+    #heroCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Dropdown Hover State */
+    .dropdown-container:hover .dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    /* Tab Active Pill */
+    .tab-btn.active {
+      background: #a3a0c2;
+      color: #1a1b24;
+      font-weight: 700;
+      border-color: #a3a0c2;
+      box-shadow: 0 0 15px rgba(163, 160, 194, 0.35);
+    }
+  </style>
+</head>
+<body class="antialiased">
+
+  <!-- Background Animated Slate Purplish Glow Ambient Lights -->
+  <div class="fixed top-[-10%] left-[-10%] w-[600px] h-[600px] bg-[#3f4055]/30 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="fixed bottom-[-10%] right-[-10%] w-[650px] h-[650px] bg-[#343546]/35 rounded-full blur-[160px] pointer-events-none"></div>
+  <div class="fixed top-[40%] right-[20%] w-[400px] h-[400px] bg-[#47485e]/20 rounded-full blur-[150px] pointer-events-none"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar glass-nav fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#home" class="flex items-center gap-3 group">
+        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-[#3f4055] via-[#343546] to-[#232431] flex items-center justify-center border border-[#a3a0c2]/40 font-serif font-black text-xl text-white shadow-lg group-hover:border-[#c0bdde] transition-colors">
+          F
+        </div>
+        <div class="flex flex-col">
+          <span class="font-serif text-lg tracking-wider font-extrabold text-white group-hover:text-[#c0bdde] transition-colors">FIMMUN<span class="text-[#a3a0c2]">.VI</span></span>
+          <span class="text-[9px] tracking-widest text-[#a8a6be] uppercase font-semibold">Ascend Edition</span>
+        </div>
+      </a>
+
+      <!-- Desktop Nav Links -->
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#home" class="text-sm font-semibold text-gray-200 hover:text-white transition-colors relative py-1 hover:after:w-full after:w-0 after:h-[2px] after:bg-[#a3a0c2] after:absolute after:bottom-0 after:left-0 after:transition-all">Home</a>
+        <a href="#about" class="text-sm font-semibold text-gray-200 hover:text-white transition-colors relative py-1 hover:after:w-full after:w-0 after:h-[2px] after:bg-[#a3a0c2] after:absolute after:bottom-0 after:left-0 after:transition-all">About</a>
+        <a href="#committees" class="text-sm font-semibold text-gray-200 hover:text-white transition-colors relative py-1 hover:after:w-full after:w-0 after:h-[2px] after:bg-[#a3a0c2] after:absolute after:bottom-0 after:left-0 after:transition-all">Committees</a>
+        <a href="#legacy" class="text-sm font-semibold text-gray-200 hover:text-white transition-colors relative py-1 hover:after:w-full after:w-0 after:h-[2px] after:bg-[#a3a0c2] after:absolute after:bottom-0 after:left-0 after:transition-all">Legacy</a>
+        <a href="#scale" class="text-sm font-semibold text-gray-200 hover:text-white transition-colors relative py-1 hover:after:w-full after:w-0 after:h-[2px] after:bg-[#a3a0c2] after:absolute after:bottom-0 after:left-0 after:transition-all">Impact</a>
+        
+        <a href="https://www.instagram.com/fimmun.vi?psln=MWY1NXB6NnNudG9hMA==" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-xs font-bold text-[#f0eff7] border border-[#a3a0c2]/40 hover:border-[#c0bdde] hover:bg-[#3f4055]/50 transition-all glow-purple-sm">
+          <i class="fa-brands fa-instagram text-[#c0bdde]"></i>
+          <span>@fimmun.vi</span>
+        </a>
+      </div>
+
+      <!-- Mobile Hamburger Button -->
+      <button id="mobileMenuBtn" aria-label="Toggle Menu" class="md:hidden text-gray-200 hover:text-white p-2 rounded-lg focus:outline-none">
+        <i class="fa-solid fa-bars text-xl"></i>
+      </button>
+    </div>
+
+    <!-- Mobile Drawer Navigation -->
+    <div id="mobileMenu" class="hidden md:hidden glass-panel border-t border-[#a3a0c2]/30 px-6 py-6 space-y-4">
+      <a href="#home" class="mobile-link block text-gray-200 hover:text-[#c0bdde] font-semibold text-base">Home</a>
+      <a href="#about" class="mobile-link block text-gray-200 hover:text-[#c0bdde] font-semibold text-base">About</a>
+      <a href="#committees" class="mobile-link block text-gray-200 hover:text-[#c0bdde] font-semibold text-base">Committees</a>
+      <a href="#legacy" class="mobile-link block text-gray-200 hover:text-[#c0bdde] font-semibold text-base">Legacy</a>
+      <a href="#scale" class="mobile-link block text-gray-200 hover:text-[#c0bdde] font-semibold text-base">Impact</a>
+      <a href="https://www.instagram.com/fimmun.vi?psln=MWY1NXB6NnNudG9hMA==" target="_blank" rel="noopener noreferrer" 
+         class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel text-xs font-bold text-[#f0eff7] border border-[#a3a0c2]/40">
+        <i class="fa-brands fa-instagram text-[#c0bdde]"></i>
+        <span>@fimmun.vi</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="home" class="relative min-h-screen flex items-center justify-center pt-28 pb-20 px-4 sm:px-6 overflow-hidden">
+    <!-- Interactive Canvas Particle Background -->
+    <canvas id="heroCanvas"></canvas>
+
+    <div class="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center">
+      
+      <!-- Top Badge -->
+      <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-[#343546]/80 border border-[#a3a0c2]/40 text-[#c0bdde] text-xs font-extrabold tracking-widest uppercase mb-6 glow-purple-sm">
+        <span class="w-2 h-2 rounded-full bg-[#c0bdde] animate-ping"></span>
+        ✦ Herald of Diplomacy ✦
+      </div>
+
+      <!-- Main Title -->
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-black font-serif tracking-tight text-gradient leading-tight mb-4 drop-shadow-md">
+        FIMMUN VI
+      </h1>
+      <h2 class="text-2xl sm:text-4xl font-extrabold font-serif text-[#c0bdde] tracking-widest uppercase mb-6 drop-shadow-sm">
+        ASCEND EDITION
+      </h2>
+
+      <!-- Subtitle -->
+      <p class="text-base sm:text-lg md:text-xl text-[#a8a6be] max-w-2xl font-normal leading-relaxed mb-10">
+        Fazaia Inter College Minhas Model United Nations 2027. Empowering future leaders through diplomatic debate, strategic negotiating, and sovereign resolution.
+      </p>
+
+      <!-- Conference Info Badges Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-xl mb-12">
+        <div class="glass-card p-5 rounded-2xl flex items-center justify-center gap-4 text-left border border-[#a3a0c2]/30">
+          <div class="w-12 h-12 rounded-xl bg-[#3f4055]/60 border border-[#a3a0c2]/30 flex items-center justify-center text-[#c0bdde] shadow-md">
+            <i class="fa-regular fa-calendar-days text-xl"></i>
+          </div>
+          <div>
+            <div class="text-xs text-[#a8a6be] font-bold uppercase tracking-wider">Conference Dates</div>
+            <div class="text-base font-extrabold text-white">X / Y / Z JANUARY 2027</div>
+          </div>
+        </div>
+
+        <div class="glass-card p-5 rounded-2xl flex items-center justify-center gap-4 text-left border border-[#a3a0c2]/30">
+          <div class="w-12 h-12 rounded-xl bg-[#3f4055]/60 border border-[#a3a0c2]/30 flex items-center justify-center text-[#c0bdde] shadow-md">
+            <i class="fa-solid fa-location-dot text-xl"></i>
+          </div>
+          <div>
+            <div class="text-xs text-[#a8a6be] font-bold uppercase tracking-wider">Venue</div>
+            <div class="text-base font-extrabold text-white">FIC Minhas, Kamra, Pakistan</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Buttons Group -->
+      <div class="flex flex-col sm:flex-row items-center gap-5 w-full sm:w-auto">
+        
+        <!-- Dropdown Registration Button -->
+        <div class="relative dropdown-container w-full sm:w-auto">
+          <button class="w-full sm:w-auto px-9 py-4 rounded-xl bg-gradient-to-r from-[#f0eff7] via-white to-[#c0bdde] text-[#1d1e28] font-extrabold text-sm tracking-wide shadow-xl hover:bg-white transition-all flex items-center justify-center gap-3 group border border-[#c0bdde]">
+            <i class="fa-solid fa-pen-to-square text-[#232431] group-hover:rotate-12 transition-transform text-base"></i>
+            <span>Register Now</span>
+            <i class="fa-solid fa-chevron-down text-xs ml-1 text-[#232431]"></i>
+          </button>
+
+          <!-- Dropdown Options Menu -->
+          <div class="dropdown-menu opacity-0 invisible translate-y-2 transition-all duration-200 absolute left-0 sm:left-auto right-0 top-full mt-2 w-full sm:w-64 glass-panel rounded-xl shadow-2xl p-2 z-30 border border-[#a3a0c2]/40">
+            <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-gray-100 hover:text-white hover:bg-[#3f4055]/70 transition-colors">
+              <i class="fa-solid fa-user-tie text-[#c0bdde] text-base"></i>
+              <div class="text-left">
+                <div class="font-bold">Delegate Form</div>
+                <div class="text-[10px] text-[#a8a6be]">Represent a country</div>
+              </div>
+            </a>
+            <div class="h-[1px] bg-[#a3a0c2]/30 my-1"></div>
+            <a href="https://a98004215-commits.github.io/fimmun-vi-observer-/" target="_blank" rel="noopener noreferrer" 
+               class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm text-gray-100 hover:text-white hover:bg-[#3f4055]/70 transition-colors">
+              <i class="fa-solid fa-eye text-[#c0bdde] text-base"></i>
+              <div class="text-left">
+                <div class="font-bold">Observer Form</div>
+                <div class="text-[10px] text-[#a8a6be]">Participate in workshops</div>
+              </div>
+            </a>
+          </div>
+        </div>
+
+        <!-- Instagram Secondary Button -->
+        <a href="https://www.instagram.com/fimmun.vi?psln=MWY1NXB6NnNudG9hMA==" target="_blank" rel="noopener noreferrer" 
+           class="w-full sm:w-auto px-9 py-4 rounded-xl glass-panel border border-[#a3a0c2]/40 hover:border-[#c0bdde] text-white font-bold text-sm tracking-wide transition-all flex items-center justify-center gap-2 hover:bg-[#3f4055]/50 shadow-lg">
+          <i class="fa-brands fa-instagram text-[#c0bdde] text-lg"></i>
+          <span>View Instagram Page</span>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-[#a3a0c2]/30 relative overflow-hidden shadow-xl">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+        <div>
+          <div class="text-xs font-extrabold text-[#c0bdde] uppercase tracking-widest mb-2 font-serif">Welcome to FIMMUN VI</div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-serif text-white mb-4">A Tradition of Diplomatic Rigor</h2>
+          <p class="text-[#a8a6be] text-sm sm:text-base leading-relaxed mb-6">
+            Fazaia Inter College Minhas Model United Nations has long stood as a cornerstone for academic debate, strategic diplomacy, and youth leadership. FIMMUN VI: Ascend Edition raises the benchmark with unprecedented committee dynamics, national crises, and world-class executive bureau directors.
+          </p>
+          <div class="flex items-center gap-4 text-xs font-bold text-[#c0bdde]">
+            <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-[#a3a0c2]"></i> Parliamentary Precision</div>
+            <div class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-[#a3a0c2]"></i> Real-World Agendas</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="glass-card p-6 rounded-2xl text-center border border-[#a3a0c2]/30">
+            <div class="text-3xl font-extrabold text-[#c0bdde] font-serif mb-1">7</div>
+            <div class="text-xs text-[#a8a6be] font-bold uppercase">Specialized Councils</div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl text-center border border-[#a3a0c2]/30">
+            <div class="text-3xl font-extrabold text-[#c0bdde] font-serif mb-1">3</div>
+            <div class="text-xs text-[#a8a6be] font-bold uppercase">Days of Debate</div>
+          </div>
+          <div class="glass-card p-6 rounded-2xl text-center col-span-2 border border-[#a3a0c2]/30">
+            <div class="text-3xl font-extrabold text-[#c0bdde] font-serif mb-1">100%</div>
+            <div class="text-xs text-[#a8a6be] font-bold uppercase">Immersive Statecraft</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Committees Section -->
+  <section id="committees" class="py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="text-xs font-extrabold text-[#c0bdde] uppercase tracking-widest mb-2 font-serif">Chambers of Debate</div>
+      <h2 class="text-3xl sm:text-5xl font-extrabold font-serif text-white mb-4">Specialized Councils</h2>
+      <p class="text-[#a8a6be] text-sm sm:text-base">
+        Explore our meticulously crafted committees engineered to test strategic negotiation, crisis intervention, and resolution drafting.
+      </p>
+
+      <!-- Category Filter Tabs & Search Bar -->
+      <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap justify-center gap-2" id="filterContainer">
+          <button class="tab-btn active px-4 py-2 rounded-xl text-xs font-bold border border-[#a3a0c2]/40 transition-all" data-filter="all">All Councils</button>
+          <button class="tab-btn px-4 py-2 rounded-xl text-xs font-bold glass-panel border border-[#a3a0c2]/30 text-[#f0eff7] hover:text-white transition-all" data-filter="global">Global</button>
+          <button class="tab-btn px-4 py-2 rounded-xl text-xs font-bold glass-panel border border-[#a3a0c2]/30 text-[#f0eff7] hover:text-white transition-all" data-filter="national">National</button>
+          <button class="tab-btn px-4 py-2 rounded-xl text-xs font-bold glass-panel border border-[#a3a0c2]/30 text-[#f0eff7] hover:text-white transition-all" data-filter="crisis">Crisis & Regional</button>
+        </div>
+
+        <!-- Search Input -->
+        <div class="relative w-full sm:w-64">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-xs text-[#a3a0c2]"></i>
+          <input type="text" id="searchInput" placeholder="Search committee..." 
+                 class="w-full bg-[#1f202b]/60 border border-[#a3a0c2]/40 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-[#a8a6be]/70 focus:outline-none focus:border-[#c0bdde] transition-colors" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Committees Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="committeesGrid">
+      
+      <!-- PNA Card -->
+      <div class="committee-card glass-card rounded-2xl p-6 flex flex-col justify-between border border-[#a3a0c2]/30" data-category="national">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-extrabold tracking-widest text-[#c0bdde] font-serif bg-[#232431]/80 px-3 py-1 rounded-full border border-[#a3a0c2]/30">PNA</span>
+            <span class="text-[10px] text-[#a8a6be] uppercase tracking-wider font-bold">National Chamber</span>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-white mb-3">Pakistan National Assembly</h3>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed mb-6">
+            A specialized national chamber focused on parliamentary deliberations, constitutional legislation, and contemporary domestic legislative matters within Pakistan.
+          </p>
+        </div>
+        <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3 rounded-xl bg-[#3f4055]/70 hover:bg-[#a3a0c2] hover:text-[#1d1e28] text-white font-extrabold text-xs uppercase tracking-wider text-center border border-[#a3a0c2]/40 hover:border-[#c0bdde] transition-all flex items-center justify-center gap-2 shadow-md">
+          <span>Register Now</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- UNSC Card -->
+      <div class="committee-card glass-card rounded-2xl p-6 flex flex-col justify-between border border-[#a3a0c2]/30" data-category="global">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-extrabold tracking-widest text-[#c0bdde] font-serif bg-[#232431]/80 px-3 py-1 rounded-full border border-[#a3a0c2]/30">UNSC</span>
+            <span class="text-[10px] text-[#a8a6be] uppercase tracking-wider font-bold">Global Peace</span>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-white mb-3">United Nations Security Council</h3>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed mb-6">
+            The premier international organ tasked with maintaining global peace and security, addressing active armed conflict, and deploying peacekeeping frameworks.
+          </p>
+        </div>
+        <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3 rounded-xl bg-[#3f4055]/70 hover:bg-[#a3a0c2] hover:text-[#1d1e28] text-white font-extrabold text-xs uppercase tracking-wider text-center border border-[#a3a0c2]/40 hover:border-[#c0bdde] transition-all flex items-center justify-center gap-2 shadow-md">
+          <span>Register Now</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- UNHRC Card -->
+      <div class="committee-card glass-card rounded-2xl p-6 flex flex-col justify-between border border-[#a3a0c2]/30" data-category="global">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-extrabold tracking-widest text-[#c0bdde] font-serif bg-[#232431]/80 px-3 py-1 rounded-full border border-[#a3a0c2]/30">UNHRC</span>
+            <span class="text-[10px] text-[#a8a6be] uppercase tracking-wider font-bold">Human Rights</span>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-white mb-3">United Nations Human Rights Council</h3>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed mb-6">
+            Dedicated to safeguarding universal human rights, investigating systematic violations, and reinforcing foundational liberties across sovereign states.
+          </p>
+        </div>
+        <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3 rounded-xl bg-[#3f4055]/70 hover:bg-[#a3a0c2] hover:text-[#1d1e28] text-white font-extrabold text-xs uppercase tracking-wider text-center border border-[#a3a0c2]/40 hover:border-[#c0bdde] transition-all flex items-center justify-center gap-2 shadow-md">
+          <span>Register Now</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- UNCSW Card -->
+      <div class="committee-card glass-card rounded-2xl p-6 flex flex-col justify-between border border-[#a3a0c2]/30" data-category="global">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-extrabold tracking-widest text-[#c0bdde] font-serif bg-[#232431]/80 px-3 py-1 rounded-full border border-[#a3a0c2]/30">UNCSW</span>
+            <span class="text-[10px] text-[#a8a6be] uppercase tracking-wider font-bold">Equity & Advocacy</span>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-white mb-3">Commission on the Status of Women</h3>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed mb-6">
+            The principal global intergovernmental body exclusively dedicated to the promotion of gender equality and the empowerment of women worldwide.
+          </p>
+        </div>
+        <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3 rounded-xl bg-[#3f4055]/70 hover:bg-[#a3a0c2] hover:text-[#1d1e28] text-white font-extrabold text-xs uppercase tracking-wider text-center border border-[#a3a0c2]/40 hover:border-[#c0bdde] transition-all flex items-center justify-center gap-2 shadow-md">
+          <span>Register Now</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- UNDISEC Card -->
+      <div class="committee-card glass-card rounded-2xl p-6 flex flex-col justify-between border border-[#a3a0c2]/30" data-category="global">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-extrabold tracking-widest text-[#c0bdde] font-serif bg-[#232431]/80 px-3 py-1 rounded-full border border-[#a3a0c2]/30">UNDISEC</span>
+            <span class="text-[10px] text-[#a8a6be] uppercase tracking-wider font-bold">Disarmament</span>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-white mb-3">Disarmament & Int. Security</h3>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed mb-6">
+            Addressing global disarmament initiatives, non-proliferation treaties, arms control measures, and mitigation of transnational security threats.
+          </p>
+        </div>
+        <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3 rounded-xl bg-[#3f4055]/70 hover:bg-[#a3a0c2] hover:text-[#1d1e28] text-white font-extrabold text-xs uppercase tracking-wider text-center border border-[#a3a0c2]/40 hover:border-[#c0bdde] transition-all flex items-center justify-center gap-2 shadow-md">
+          <span>Register Now</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- NCC Card -->
+      <div class="committee-card glass-card rounded-2xl p-6 flex flex-col justify-between border border-[#a3a0c2]/30" data-category="crisis">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-extrabold tracking-widest text-[#c0bdde] font-serif bg-[#232431]/80 px-3 py-1 rounded-full border border-[#a3a0c2]/30">NCC</span>
+            <span class="text-[10px] text-[#a8a6be] uppercase tracking-wider font-bold">Crisis Cabinet</span>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-white mb-3">National Crisis Committee</h3>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed mb-6">
+            A fast-paced, high-stakes simulated cabinet committee built for immediate crisis intervention, strategic maneuvers, and real-time statecraft.
+          </p>
+        </div>
+        <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3 rounded-xl bg-[#3f4055]/70 hover:bg-[#a3a0c2] hover:text-[#1d1e28] text-white font-extrabold text-xs uppercase tracking-wider text-center border border-[#a3a0c2]/40 hover:border-[#c0bdde] transition-all flex items-center justify-center gap-2 shadow-md">
+          <span>Register Now</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+      <!-- OIC Card -->
+      <div class="committee-card glass-card rounded-2xl p-6 flex flex-col justify-between border border-[#a3a0c2]/30" data-category="crisis">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-extrabold tracking-widest text-[#c0bdde] font-serif bg-[#232431]/80 px-3 py-1 rounded-full border border-[#a3a0c2]/30">OIC</span>
+            <span class="text-[10px] text-[#a8a6be] uppercase tracking-wider font-bold">Regional Body</span>
+          </div>
+          <h3 class="text-xl font-bold font-serif text-white mb-3">Organisation of Islamic Cooperation</h3>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed mb-6">
+            Uniting member states to safeguard collective interests, foster economic cooperation, and address geopolitical issues affecting member nations.
+          </p>
+        </div>
+        <a href="https://a98004215-commits.github.io/fimmun-vi-delegate-/" target="_blank" rel="noopener noreferrer" 
+           class="w-full py-3 rounded-xl bg-[#3f4055]/70 hover:bg-[#a3a0c2] hover:text-[#1d1e28] text-white font-extrabold text-xs uppercase tracking-wider text-center border border-[#a3a0c2]/40 hover:border-[#c0bdde] transition-all flex items-center justify-center gap-2 shadow-md">
+          <span>Register Now</span>
+          <i class="fa-solid fa-arrow-right text-[10px]"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Legacy Section -->
+  <section id="legacy" class="py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div class="glass-panel p-8 sm:p-14 rounded-3xl border border-[#a3a0c2]/30 text-center relative overflow-hidden glow-purple-sm shadow-xl">
+      
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#232431]/80 border border-[#a3a0c2]/40 text-[#c0bdde] text-xs font-bold tracking-widest uppercase mb-4">
+        ✦ The Legacy Continues ✦
+      </div>
+
+      <h2 class="text-3xl sm:text-5xl font-extrabold font-serif text-white mb-6">Our Past & Ascension</h2>
+      <p class="text-[#a8a6be] text-sm sm:text-base max-w-3xl mx-auto leading-relaxed mb-12">
+        FIMMUN has built an exceptional tradition of academic rigor, fierce diplomacy, and unmatched leadership development. With the Ascend Edition, we elevate every single facet of the conference to forge an immortal legacy.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+        <!-- Pillar 1 -->
+        <div class="glass-card p-6 rounded-2xl border border-[#a3a0c2]/30">
+          <div class="w-12 h-12 rounded-xl bg-[#3f4055]/60 border border-[#a3a0c2]/40 flex items-center justify-center text-[#c0bdde] mb-4 text-xl shadow-md">
+            <i class="fa-solid fa-gavel"></i>
+          </div>
+          <h4 class="text-lg font-bold font-serif text-white mb-2">Elevated Debates</h4>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed">
+            Meticulously curated agendas engineered to challenge delegates with complex geopolitical and institutional frameworks.
+          </p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div class="glass-card p-6 rounded-2xl border border-[#a3a0c2]/30">
+          <div class="w-12 h-12 rounded-xl bg-[#3f4055]/60 border border-[#a3a0c2]/40 flex items-center justify-center text-[#c0bdde] mb-4 text-xl shadow-md">
+            <i class="fa-solid fa-crown"></i>
+          </div>
+          <h4 class="text-lg font-bold font-serif text-white mb-2">Prestigious Bureau</h4>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed">
+            Chairs and directors handpicked from premier parliamentary and Model UN circuits across the nation.
+          </p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div class="glass-card p-6 rounded-2xl border border-[#a3a0c2]/30">
+          <div class="w-12 h-12 rounded-xl bg-[#3f4055]/60 border border-[#a3a0c2]/40 flex items-center justify-center text-[#c0bdde] mb-4 text-xl shadow-md">
+            <i class="fa-solid fa-champagne-glasses"></i>
+          </div>
+          <h4 class="text-lg font-bold font-serif text-white mb-2">Upgraded Socials</h4>
+          <p class="text-[#a8a6be] text-xs sm:text-sm leading-relaxed">
+            Unforgettable cultural nights, networking banquets, and immersive social events designed for lifelong connections.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Impact & Scale Section with Counter Animations -->
+  <section id="scale" class="py-20 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="text-xs font-extrabold text-[#c0bdde] uppercase tracking-widest mb-2 font-serif">Reach & Footprint</div>
+      <h2 class="text-3xl sm:text-5xl font-extrabold font-serif text-white mb-4">Conference Scale</h2>
+      <p class="text-[#a8a6be] text-sm sm:text-base">
+        FIMMUN VI || ASCEND EDITION stands as a monumental gathering point for upcoming diplomats and thought leaders.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+      <!-- Scale 1 -->
+      <div class="glass-card p-8 rounded-2xl border border-[#a3a0c2]/30">
+        <div class="text-4xl sm:text-5xl font-black font-serif text-[#c0bdde] mb-2 flex justify-center items-center">
+          <span class="counter" data-target="500">0</span>+
+        </div>
+        <h4 class="text-base font-bold text-white mb-1">Total Participants</h4>
+        <p class="text-xs text-[#a8a6be] font-medium">Delegates, Observers & Secretariat members</p>
+      </div>
+
+      <!-- Scale 2 -->
+      <div class="glass-card p-8 rounded-2xl border border-[#a3a0c2]/30">
+        <div class="text-4xl sm:text-5xl font-black font-serif text-[#c0bdde] mb-2 flex justify-center items-center">
+          <span class="counter" data-target="275">0</span>
+        </div>
+        <h4 class="text-base font-bold text-white mb-1">Delegates</h4>
+        <p class="text-xs text-[#a8a6be] font-medium">Across 7 Specialized Councils</p>
+      </div>
+
+      <!-- Scale 3 -->
+      <div class="glass-card p-8 rounded-2xl border border-[#a3a0c2]/30">
+        <div class="text-4xl sm:text-5xl font-black font-serif text-[#c0bdde] mb-2 flex justify-center items-center">
+          <span class="counter" data-target="225">0</span>+
+        </div>
+        <h4 class="text-base font-bold text-white mb-1">Observers</h4>
+        <p class="text-xs text-[#a8a6be] font-medium">Engaging in Workshops & Special Sessions</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Teaser Banner -->
+  <section id="socials" class="py-16 px-4 sm:px-6 max-w-7xl mx-auto">
+    <div class="glass-panel p-8 sm:p-12 rounded-3xl text-center border border-[#a3a0c2]/40 bg-gradient-to-r from-[#343546]/80 via-[#3f4055]/80 to-[#2b2c3a]/80 relative overflow-hidden shadow-xl">
+      <i class="fa-solid fa-sparkles text-[#c0bdde] text-3xl mb-4 animate-bounce"></i>
+      <h3 class="text-2xl sm:text-4xl font-extrabold font-serif text-white mb-3">Social Nights & Gala Events</h3>
+      <p class="text-[#a8a6be] text-xs sm:text-sm tracking-widest uppercase font-extrabold mb-8">
+        Will be revealing soon! Stay tuned for exclusive updates.
+      </p>
+      <a href="https://www.instagram.com/fimmun.vi?psln=MWY1NXB6NnNudG9hMA==" target="_blank" rel="noopener noreferrer" 
+         class="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-[#3f4055] via-[#47485e] to-[#343546] text-white font-extrabold text-xs uppercase tracking-wider hover:opacity-95 transition-opacity shadow-lg glow-purple border border-[#a3a0c2]/40">
+        <i class="fa-brands fa-instagram text-lg"></i>
+        <span>Visit FIMMUN Instagram</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-[#a3a0c2]/30 py-12 bg-[#1b1c26] text-[#a8a6be] text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <!-- Footer Brand -->
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-md bg-[#343546] border border-[#a3a0c2]/40 flex items-center justify-center font-serif font-black text-white">
+          F
+        </div>
+        <span class="font-serif font-bold text-white tracking-wider">FIMMUN VI || ASCEND EDITION</span>
+      </div>
+
+      <!-- Copyright -->
+      <p class="text-center md:text-left font-medium">
+        &copy; 2027 FIMMUN VI || ASCEND EDITION. All Rights Reserved.
+      </p>
+
+      <!-- Quick Social Link -->
+      <a href="https://www.instagram.com/fimmun.vi?psln=MWY1NXB6NnNudG9hMA==" target="_blank" rel="noopener noreferrer" class="hover:text-white transition-colors flex items-center gap-2 font-bold">
+        <i class="fa-brands fa-instagram text-[#c0bdde]"></i>
+        <span>Instagram</span>
+      </a>
+    </div>
+  </footer>
+
+  <!-- JavaScript Functionalities -->
+  <script>
+    // --- 1. Canvas Particle Background Script ---
+    const canvas = document.getElementById('heroCanvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2.5 + 0.8;
+        this.speedX = (Math.random() - 0.5) * 0.45;
+        this.speedY = (Math.random() - 0.5) * 0.45;
+        this.opacity = Math.random() * 0.5 + 0.25;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+          this.reset();
+        }
+      }
+      draw() {
+        ctx.fillStyle = `rgba(163, 160, 194, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const count = Math.floor(window.innerWidth / 12);
+      for (let i = 0; i < count; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+
+    window.onload = function() {
+      initParticles();
+      animateParticles();
+    };
+
+    // --- 2. Mobile Navigation Drawer Toggle ---
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    document.querySelectorAll('.mobile-link').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // --- 3. Committee Filtering & Search ---
+    const filterBtns = document.querySelectorAll('.tab-btn');
+    const committeeCards = document.querySelectorAll('.committee-card');
+    const searchInput = document.getElementById('searchInput');
+
+    function filterCommittees() {
+      const activeFilter = document.querySelector('.tab-btn.active').getAttribute('data-filter');
+      const searchQuery = searchInput.value.toLowerCase().trim();
+
+      committeeCards.forEach(card => {
+        const category = card.getAttribute('data-category');
+        const text = card.textContent.toLowerCase();
+
+        const matchesFilter = activeFilter === 'all' || category === activeFilter;
+        const matchesSearch = text.includes(searchQuery);
+
+        if (matchesFilter && matchesSearch) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        filterCommittees();
+      });
+    });
+
+    searchInput.addEventListener('input', filterCommittees);
+
+    // --- 4. Animated Number Counter on Scroll ---
+    const counters = document.querySelectorAll('.counter');
+    let animated = false;
+
+    function runCounters() {
+      const scaleSection = document.getElementById('scale');
+      const rect = scaleSection.getBoundingClientRect();
+        if (rect.top <= window.innerHeight && !animated) {
+        animated = true;
+        counters.forEach(counter => {
+          const target = +counter.getAttribute('data-target');
+          const speed = 200;
+          const increment = target / speed;
+
+          let count = 0;
+          const updateCount = () => {
+            count += increment;
+            if (count < target) {
+              counter.innerText = Math.ceil(count);
+              setTimeout(updateCount, 15);
+            } else {
+              counter.innerText = target;
+            }
+          };
+          updateCount();
+        });
+      }
+    }
+
+    window.addEventListener('scroll', runCounters);
+  </script>
+</body>
+</html>
